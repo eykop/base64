@@ -1,4 +1,4 @@
-I alwayd wondered how the base64 works , 
+I always wondered how the base64 works , 
 and how different libraries implement base64 encoder decoder,
 for example boost and others...
 
