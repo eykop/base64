@@ -32,19 +32,19 @@ using namespace std;
 
 namespace eykop {
 
+static const std::string REGULAR_CODES = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+static const std::string URL_CODES     = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_=";
+
+
 void base64Encode(const std::string &inputString, std::string& encodedString, const bool url_safe_encoding=false)
 {
     //init the CODES constant string using lambda method...
     const std::string CODES = [&]{
-        std::string selected_codes;
-        const std::string REGULAR_CODES     = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
-        const std::string URL_CODES = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_=";
         if(url_safe_encoding){
-            selected_codes = URL_CODES;
+            return URL_CODES;
         }else{
-            selected_codes = REGULAR_CODES;
+            return REGULAR_CODES;
         }
-        return selected_codes;
     }();
 
     //Convert each char in input string to 8 bits 'byte represntation of given char' - and append to the bitsOfOiginalString variable!
@@ -92,5 +92,33 @@ void base64Encode(const std::string &inputString, std::string& encodedString, co
     }
     encodedString = outputstream.str();
 }
+
+void base64Decode(const std::string &inputString, std::string& outputString, const bool url_safe_encoding=false)
+{
+    std::stringstream outputstream;
+    //init the CODES constant string using lambda method...
+    const std::string CODES = [&]{
+        if(url_safe_encoding){
+            return URL_CODES;
+        }else{
+            return REGULAR_CODES;
+        }
+    }();
+    std::string bitsOfOriginalString;
+    for(unsigned int i =0 ; i< inputString.size(); i++){
+        //get the index of the index of the Base64 code Char -
+        //we want to get this index 6 bits representation...
+        size_t index= REGULAR_CODES.find_first_of(inputString[i]);
+        bitsOfOriginalString+=std::bitset<6>(index).to_string();
+    }
+    //take each 8 bits and cast them to character!
+    for(size_t j=0; j< bitsOfOriginalString.size() ; j+=8){
+        std::string sub = bitsOfOriginalString.substr(j,8);
+        outputstream<<static_cast<char>(std::bitset<8>(sub).to_ulong());
+    }
+    outputString = outputstream.str();
 }
+}
+
+
 #endif // BASE64_HPP
