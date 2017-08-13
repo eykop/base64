@@ -18,9 +18,8 @@ something I didn't see any other library using it when performing base64 encodin
 I tryied to add the padding of '=' at end - its working fine I guess.
 
 TODO LIST:
-1. Add a decoder code.
-2. Add tests.
-3. This is a qtcreator project for now.
+1. Add tests.
+2. This is a qtcreator project for now.
    I will add a makefile to remove dependency on qtcreator later.
 
 I didn't test the code deeply - just used several strings and encoded that with online base encoders 
